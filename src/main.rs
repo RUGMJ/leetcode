@@ -15,7 +15,6 @@ async fn find_problems<'a>(api: &UserApi, problem_keyword: &'a str) -> Vec<Quest
     let problems = api
         .problem_builder()
         .set_keyword(problem_keyword)
-        .set_note_limit(1)
         .build()
         .await
         .unwrap();
@@ -135,6 +134,28 @@ fn open_in_editor(path: &str, editor: &str) {
         .expect("Something went wrong launching neovide");
 }
 
+fn pick_problem(problems: &Vec<Question>) -> &Question {
+    if problems.len() == 1 {
+        return &problems[0];
+    }
+
+    println!("Pick from the following problems: ");
+    for (i, problem) in problems.iter().enumerate() {
+        println!("{}: {}", i, problem.titleSlug);
+    }
+
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Error reading input");
+
+    let input: usize = input.trim().parse().expect("Error parsing input");
+    if input > problems.len() {
+        panic!("Not an option");
+    }
+    &problems[input]
+}
+
 #[tokio::main]
 async fn main() {
     let token = dotenv!("COOKIE");
@@ -151,13 +172,8 @@ async fn main() {
     let api = UserApi::new(token).await.unwrap();
 
     let problems = find_problems(&api, problem_keyword).await;
-    let problem = problems.first();
+    let problem = pick_problem(&problems);
 
-    if problem.is_none() {
-        panic!("Couldn't find the problem \"{}\"", problem_keyword);
-    }
-
-    let problem = problem.unwrap();
     let problem = get_full_problem_data(&api, problem).await;
     let code_snippet = get_code_snippet(&problem);
     let problem = problem.full_data.data.question;
