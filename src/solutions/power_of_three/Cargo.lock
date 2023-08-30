@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "is_power_of_three"
+name = "power_of_three"
 version = "0.1.0"
