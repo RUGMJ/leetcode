@@ -1,0 +1,4 @@
+/target
+.env
+.bacon-locations
+./src/solutions/*/*/target
