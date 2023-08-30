@@ -89,7 +89,9 @@ fn create_binary(path: &str, code_snippet: &str) {
         r#"
 fn main() {{}}
 
+#[allow(dead_code)]
 struct Solution;
+#[allow(dead_code)]
 {}
 
 #[cfg(test)]
