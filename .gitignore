@@ -3,3 +3,5 @@
 .bacon-locations
 /src/solutions/*/target
 /src/solutions/*/.bacon-locations
+/src/old_solutions/*/target
+/src/old_solutions/*/.bacon-locations
